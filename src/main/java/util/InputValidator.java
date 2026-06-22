@@ -11,21 +11,21 @@ public class InputValidator {
     /**
      * 获取整数输入，包含异常处理
      */
-//    public static int getIntInput(Scanner scanner, String prompt) {
-//        while (true) {
-//            try {
-//                System.out.print(prompt);
-//                String input = scanner.nextLine().trim();
-//                if (input.isEmpty()) {
-//                    System.out.println("输入不能为空，请重新输入！");
-//                    continue;
-//                }
-//                return Integer.parseInt(input);
-//            } catch (NumberFormatException e) {
-//                System.out.println("请输入有效的整数！");
-//            }
-//        }
-//    }
+    public static int getIntInput(Scanner scanner, String prompt) {
+        while (true) {
+            try {
+                System.out.print(prompt);
+                String input = scanner.nextLine().trim();
+                if (input.isEmpty()) {
+                    System.out.println("输入不能为空，请重新输入！");
+                    continue;
+                }
+                return Integer.parseInt(input);
+            } catch (NumberFormatException e) {
+                System.out.println("请输入有效的整数！");
+            }
+        }
+    }
     
     /**
      * 获取指定范围的整数输入
