@@ -46,6 +46,31 @@ public class FileDataStore {
         }
     }
 
-    ？
+    /**
+     * 从文件加载数据
+     * @return 加载的库存数据，如果文件不存在或加载失败返回null
+     */
+    @SuppressWarnings("unchecked")
+    public List<InventoryItem> loadData() {
+        ensureDataDirectoryExists();  // 确保目录存在
+
+        File file = new File(DATA_FILE);
+        if (!file.exists()) {
+            System.out.println("数据文件不存在，将使用初始测试数据。");
+            return null;
+        }
+
+        try (ObjectInputStream ois = new ObjectInputStream(
+                new FileInputStream(DATA_FILE))) {
+            Object obj = ois.readObject();
+            if (obj instanceof List) {
+                System.out.println("数据加载成功，共 " + ((List<?>) obj).size() + " 条记录。");
+                return (List<InventoryItem>) obj;
+            }
+            return null;
+        } catch (IOException | ClassNotFoundException e) {
+            System.err.println("数据加载失败: " + e.getMessage());
+            return null;
+        }
     }
 }
