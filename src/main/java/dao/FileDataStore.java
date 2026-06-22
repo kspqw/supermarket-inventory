@@ -12,13 +12,31 @@ import java.util.List;
  * 使用对象序列化方式实现数据持久化
  */
 public class FileDataStore {
-    
-    private static final String DATA_FILE = "data/inventory_data.txt";
-    
+
+    private static final String DATA_DIR = "data";
+    private static final String DATA_FILE = DATA_DIR + File.separator + "inventory_data.txt";
+
+    /**
+     * 确保数据目录存在
+     */
+    private void ensureDataDirectoryExists() {
+        File dir = new File(DATA_DIR);
+        if (!dir.exists()) {
+            boolean created = dir.mkdirs();
+            if (created) {
+                System.out.println("已创建数据目录: " + DATA_DIR);
+            } else {
+                System.err.println("无法创建数据目录: " + DATA_DIR);
+            }
+        }
+    }
+
     /**
      * 保存数据到文件
      */
     public void saveData(List<InventoryItem> inventory) {
+        ensureDataDirectoryExists();  // 确保目录存在
+
         try (ObjectOutputStream oos = new ObjectOutputStream(
                 new FileOutputStream(DATA_FILE))) {
             oos.writeObject(inventory);
@@ -27,29 +45,7 @@ public class FileDataStore {
             System.err.println("数据保存失败: " + e.getMessage());
         }
     }
-    
-    /**
-     * 从文件加载数据
-     * @return 加载的库存数据，如果文件不存在或加载失败返回null
-     */
-    @SuppressWarnings("unchecked")
-    public List<InventoryItem> loadData() {
-        File file = new File(DATA_FILE);
-        if (!file.exists()) {
-            System.out.println("数据文件不存在，将使用初始测试数据。");
-            return null;
-        }
-        
-        try (ObjectInputStream ois = new ObjectInputStream(
-                new FileInputStream(DATA_FILE))) {
-            Object obj = ois.readObject();
-            if (obj instanceof List) {
-                return (List<InventoryItem>) obj;
-            }
-            return null;
-        } catch (IOException | ClassNotFoundException e) {
-            System.err.println("数据加载失败: " + e.getMessage());
-            return null;
-        }
+
+    ？
     }
 }
